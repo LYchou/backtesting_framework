@@ -3,6 +3,10 @@ import pandas as pd
 
 
 class Strategy(bf.strategy.Strategy):
+    '''
+    計算formation_period天交易日的報酬率，當作動能訊號。
+    在月初等權重買進動能訊號前stocks_number大的股票。
+    '''
 
     
     # 預設策略內生變數(可從外面改)
@@ -13,6 +17,10 @@ class Strategy(bf.strategy.Strategy):
     )
 
     def initial(self):
+        '''
+        Strategy 類別初始化函數。
+        用於回測前需要的運算。
+        '''
         
 
         # 製作收盤價的df，以便後面計算動能
@@ -28,6 +36,10 @@ class Strategy(bf.strategy.Strategy):
         self.TheEndDates_of_TheseMonths = self.data_center.find_TheEndDates_of_TheseMonths()
 
     def pre_next(self):
+        '''
+        在執行 self.next() 前會先執行這個。
+        通常用於印出訊息，便於debug。
+        '''
 
         if self.data_center.notify_orNot:
             
@@ -46,6 +58,9 @@ class Strategy(bf.strategy.Strategy):
 
 
     def next(self):
+        '''
+        策略下單。執行主要邏輯的地方。
+        '''
         
         # 月底計算動能，隔天月初開盤調整部位
         if self.data_center.date in self.TheEndDates_of_TheseMonths:
@@ -54,6 +69,11 @@ class Strategy(bf.strategy.Strategy):
 
 
     def after_next(self):
+        
+        '''
+        在執行 self.next() 後會執行這個。
+        通常用於印出訊息，便於debug。
+        '''
 
         if self.data_center.notify_orNot:
             
